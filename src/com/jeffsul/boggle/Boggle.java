@@ -27,8 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
 @SuppressWarnings("serial")
-public class Boggle extends JFrame
-{
+public class Boggle extends JFrame {
 	private static final String BLOCKS_FILE = "Blocks.txt";
 	private static final int NUM_BLOCKS = 16;
 	private static final int SIZE = (int) Math.sqrt(NUM_BLOCKS);
@@ -51,8 +50,7 @@ public class Boggle extends JFrame
 	
 	private boolean wordOnBoard;
 	
-	public Boggle()
-	{
+	public Boggle() {
 		super("Boggle by Jeffrey Sullivan");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -67,14 +65,11 @@ public class Boggle extends JFrame
 		setVisible(true);
 	}
 	
-	private void initGUI()
-	{
+	private void initGUI() {
 		JPanel boardPnl = new JPanel(new GridLayout(SIZE, SIZE));
 		boardBtns = new Block[SIZE][SIZE];
-		for (int i = 0; i < SIZE; i++)
-		{
-			for (int j = 0; j < SIZE; j++)
-			{
+		for (int i = 0; i < SIZE; i++) {
+			for (int j = 0; j < SIZE; j++) {
 				boardBtns[i][j] = new Block();
 				boardPnl.add(boardBtns[i][j]);
 			}
@@ -104,22 +99,21 @@ public class Boggle extends JFrame
 		wordEntry.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				String word = wordEntry.getText().toUpperCase().trim();
-				if (wordOnBoard && isValidWord(word) && !wordList.contains(word))
-				{
+				if (wordOnBoard && isValidWord(word) && !wordList.contains(word)) {
 					addWordToList(word);
 					wordEntry.setText("");
 				}
 			}
 		});
 		wordEntry.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent event)
-			{
+			public void keyReleased(KeyEvent event) {
 				clear();
 				String word = wordEntry.getText().trim();
-				if (word.length() > 0)
+				if (word.length() > 0) {
 					wordOnBoard = findWordInBoard(word.toUpperCase());
-				else
+				} else {
 					wordOnBoard = false;
+				}
 			}
 		});
 		sidePnl.add(wordEntry);
@@ -127,17 +121,12 @@ public class Boggle extends JFrame
 		add(sidePnl, BorderLayout.LINE_END);
 	}
 	
-	private boolean findWordInBoard(String word)
-	{
+	private boolean findWordInBoard(String word) {
 		char firstLtr = word.charAt(0);
-		for (int i = 0; i < SIZE; i++)
-		{
-			for (int j = 0; j < SIZE; j++)
-			{
-				if (board[i][j] == firstLtr)
-				{
-					if (word.length() == 1 || findWordInBoard(word.substring(1), new boolean[SIZE][SIZE], i, j))
-					{
+		for (int i = 0; i < SIZE; i++) {
+			for (int j = 0; j < SIZE; j++) {
+				if (board[i][j] == firstLtr) {
+					if (word.length() == 1 || findWordInBoard(word.substring(1), new boolean[SIZE][SIZE], i, j)) {
 						boardBtns[i][j].highlight();
 						return true;
 					}
@@ -147,32 +136,24 @@ public class Boggle extends JFrame
 		return false;
 	}
 	
-	private boolean findWordInBoard(String word, boolean[][] checked, int x, int y)
-	{
+	private boolean findWordInBoard(String word, boolean[][] checked, int x, int y) {
 		checked[x][y] = true;
 		char ltr = word.charAt(0);
-		for (int dx = -1; dx <= 1; dx++)
-		{
-			for (int dy = -1; dy <= 1; dy++)
-			{
-				if (dx == 0 && dy == 0)
+		for (int dx = -1; dx <= 1; dx++) {
+			for (int dy = -1; dy <= 1; dy++) {
+				if (dx == 0 && dy == 0) {
 					continue;
+				}
 				int newX = x + dx;
 				int newY = y + dy;
-				if (newX >= 0 && newY >= 0 && newX < SIZE && newY < SIZE && !checked[newX][newY])
-				{
-					if (board[newX][newY] == ltr)
-					{
-						if (word.length() > 1)
-						{
-							if (findWordInBoard(word.substring(1), checked, newX, newY))
-							{
+				if (newX >= 0 && newY >= 0 && newX < SIZE && newY < SIZE && !checked[newX][newY]) {
+					if (board[newX][newY] == ltr) {
+						if (word.length() > 1) {
+							if (findWordInBoard(word.substring(1), checked, newX, newY)) {
 								boardBtns[newX][newY].highlight();
 								return true;
 							}
-						}
-						else
-						{
+						} else {
 							boardBtns[newX][newY].highlight();
 							return true;
 						}
@@ -184,30 +165,27 @@ public class Boggle extends JFrame
 		return false;
 	}
 	
-	private void clear()
-	{
-		for (int i = 0; i < SIZE; i++)
-			for (int j = 0; j < SIZE; j++)
+	private void clear() {
+		for (int i = 0; i < SIZE; i++) {
+			for (int j = 0; j < SIZE; j++) {
 				boardBtns[i][j].unHighlight();
+			}
+		}
 	}
 	
-	private void loadBlocks()
-	{
-		try
-		{
+	private void loadBlocks() {
+		try {
 			BufferedReader reader = new BufferedReader(new FileReader(BLOCKS_FILE));
 			String line;
 			int i = 0;
-			while ((line = reader.readLine()) != null)
-			{
+			while ((line = reader.readLine()) != null) {
 				blocks[i] = line;
 				i++;
 			}
-		} catch (Exception ex) { }
+		} catch (Exception ex) {}
 	}
 	
-	private void initGame()
-	{
+	private void initGame() {
 		wordList = new ArrayList<String>();
 		score = 0;
 		scorePtsLbl.setText(Integer.toString(score));
@@ -217,44 +195,41 @@ public class Boggle extends JFrame
 		displayBoard();
 	}
 	
-	private void generateBoard()
-	{
+	private void generateBoard() {
 		ArrayList<Point> posns = new ArrayList<Point>();
-		for (int i = 0; i < SIZE; i++)
-			for (int j = 0; j < SIZE; j++)
+		for (int i = 0; i < SIZE; i++) {
+			for (int j = 0; j < SIZE; j++) {
 				posns.add(new Point(i, j));
+			}
+		}
 		
 		board = new char[SIZE][SIZE];
-		for (String block : blocks)
-		{
+		for (String block : blocks) {
 			Point pos = posns.remove((int)(Math.random() * posns.size()));
 			board[pos.x][pos.y] = block.charAt((int)(Math.random() * block.length()));
 		}
 	}
 	
-	private void displayBoard()
-	{
-		for (int i = 0; i < board.length; i++)
-		{
-			for (int j = 0; j < board.length; j++)
-			{
+	private void displayBoard() {
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board.length; j++) {
 				String ltr = Character.toString(board[i][j]);
-				if (board[i][j] == 'Q')
+				if (board[i][j] == 'Q') {
 					ltr += 'u';
+				}
 				boardBtns[i][j].setText(ltr);
 			}
 		}
 	}
 	
-	private static boolean isValidWord(String word)
-	{
-		if (word.length() < 3)
+	private static boolean isValidWord(String word) {
+		if (word.length() < 3) {
 			return false;
+		}
 		return BoggleSolver.isInDictionary(word);
 	}
 	
-	private void addWordToList(String word)
-	{
+	private void addWordToList(String word) {
 		word = word.toUpperCase();
 		wordList.add(word);
 		
@@ -264,8 +239,7 @@ public class Boggle extends JFrame
 		wordListField.append(word + " (" + wordScore + ")\n");
 	}
 	
-	private static class Block extends JLabel
-	{
+	private static class Block extends JLabel {
 		private static final int BLOCK_SIZE = 100;
 		
 		private static final Font BLOCK_FONT = new Font("Arial", Font.BOLD, 28);
@@ -274,8 +248,7 @@ public class Boggle extends JFrame
 		private static final Color HIGHLIGHT = Color.YELLOW;
 		private static final Color BG = Color.WHITE;
 		
-		public Block()
-		{
+		public Block() {
 			super(" ");
 			setPreferredSize(new Dimension(BLOCK_SIZE, BLOCK_SIZE));
 			setBackground(BG);
@@ -286,19 +259,16 @@ public class Boggle extends JFrame
 			setHorizontalAlignment(SwingConstants.CENTER);
 		}
 		
-		public void highlight()
-		{
+		public void highlight() {
 			setBackground(HIGHLIGHT);
 		}
 		
-		public void unHighlight()
-		{
+		public void unHighlight() {
 			setBackground(BG);
 		}
 	}
 	
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		new Boggle();
 	}
 }

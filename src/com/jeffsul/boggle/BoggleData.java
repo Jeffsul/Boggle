@@ -4,16 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class BoggleData 
-{
-	public static void main(String[] args) throws IOException
-	{
+public class BoggleData {
+	public static void main(String[] args) throws IOException {
 		BufferedReader reader = new BufferedReader(new FileReader("boardScores.txt"));
 		String line;
 		long sum = 0;
 		long count = 0;
-		while ((line = reader.readLine()) != null)
-		{
+		while ((line = reader.readLine()) != null) {
 			sum += Integer.parseInt(line);
 			count++;
 		}
@@ -24,8 +21,7 @@ public class BoggleData
 		reader = new BufferedReader(new FileReader("totalWords.txt"));
 		sum = 0;
 		count = 0;
-		while ((line = reader.readLine()) != null)
-		{
+		while ((line = reader.readLine()) != null) {
 			sum += Integer.parseInt(line);
 			count++;
 		}
